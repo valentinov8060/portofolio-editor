@@ -1,0 +1,165 @@
+html {
+    scroll-behavior: smooth;
+    scroll-padding: var(--scroll-padding, 5rem);
+}
+
+body {
+    font-family: 'Gabarito', cursive;
+}
+
+.primary-navigation ul>li>a {
+    position: relative;
+    padding: 10px 12px;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    color: rgba(33, 37, 41, 0.5);
+    transition: all .3s ease;
+    line-height: normal;
+}
+
+.vv {
+    transition: all 0.3s ease;
+}
+
+.vv2 {
+    padding: 14px 0 !important;
+    transition: all 0.4s ease;
+}
+
+.nav-link.active {
+    color: #000 !important;
+    background-color: transparent;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+a:link {
+    text-decoration: none
+}
+
+.profile-pic {
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+}
+
+.mm {
+    padding: 150px 0;
+}
+
+.mm h2 {
+    width: 700px;
+    margin: 0 auto;
+}
+
+.fw-800 {
+    font-weight: 800;
+}
+
+.fw-900 {
+    font-weight: 900;
+}
+
+.nn {
+    margin: 15px 0;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.projects {
+    margin: 15px 0;
+}
+
+.nn:hover {
+    border: 1px solid #f5f5f5;
+}
+
+.nn i {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.mm2 {
+    padding: 100px 0;
+}
+
+.ls-2 {
+    letter-spacing: 2px;
+}
+
+.progress,
+.progress-stacked {
+    height: 5px;
+}
+
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.overlay:hover {
+    opacity: 0.8;
+}
+
+.mm3 {
+    display: flex;
+    flex-direction: column;
+    top: 40%;
+    position: absolute;
+    width: 100%;
+    justify-content: center;
+}
+
+.mm3 h5 {
+    letter-spacing: 2px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.overlay a h5 {
+    color: #000;
+}
+
+.swiper {
+    max-width: 700px;
+    height: 350px;
+}
+
+.swiper-pagination-bullet {
+    background-color: #fff;
+    opacity: 0.4;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: aqua !important;
+}
+.navbar-toggler-icon{
+    width: 1em;
+    height: 1em;
+    color: #fff;
+    border-color: #fff;
+    background-color: #fff;
+}
+.navbar-toggler{
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 100%;
+    color: #fff;
+    border-color: #ddd;
+    background-color: #fff;
+}
