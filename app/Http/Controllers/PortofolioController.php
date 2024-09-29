@@ -85,6 +85,12 @@ class PortofolioController extends Controller
         return view('editor', compact('data'));
     }
 
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login page');
+    }
+
     /* editor function */
     public function profile(Request $request)
     {
@@ -124,10 +130,34 @@ class PortofolioController extends Controller
             return redirect()->back()->with('success', 'Profile updated successfully.');
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e);
             Log::error('Failed to update profile: '.$e->getMessage());
+            dd($e);
             return redirect()->back()->with('error', 'Failed to update profile: ' . $e->getMessage());
         }
     }
 
+    public function about(Request $request) {
+        $validation = $request->validate([
+            'about' => 'required|string|max:1000',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $profile = Portofolio::where('id', 1)->first();
+
+            $data = [
+                'about' => $validation['about'],
+                'updated_at' => now(),
+            ];
+
+            $profile->update($data);
+
+            DB::commit();
+            return redirect()->back()->with('success', 'About updated successfully.');
+        } catch (Exception $e) {
+            Log::error('Failed to update about: '.$e->getMessage());
+            dd($e);
+            return redirect()->back()->with('error', 'Failed to update about: ' . $e->getMessage());
+        }
+    }
 }

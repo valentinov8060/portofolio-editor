@@ -6,7 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/icon/x-icon" href="{{ asset('img/icons/person-vcard-fill.svg') }}">
     {{-- $data->name --}}
-    <title>{{ $data->name }}</title>
+    <title>
+        @if (!empty($data->name))
+            {{ $data->name }}
+        @else
+            ...
+        @endif
+    </title>
 
     <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
@@ -20,7 +26,13 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top vv">
         <div class="container">
             {{-- $data->name --}}
-            <a class="navbar-brand fw-bolder" href="{{ route('login page') }}">{{ $data->name }}</a>
+            <a class="navbar-brand fw-bolder" href="{{ route('login page') }}">
+                @if (!empty($data->name))
+                    {{ $data->name }}
+                @else
+                    ...
+                @endif
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -53,14 +65,30 @@
         <div class="text-center mm">
             <div class="pb-3">
                 {{-- $data->profile_picture --}}
-                <img src="data:{{ $data->mime_type }};base64,{{ $data->profile_picture }}" class="profile-pic">
+                @if (!empty($data->profile_picture))
+                    <img src="data:{{ $data->mime_type }};base64,{{ $data->profile_picture }}" class="profile-pic">
+                @else
+                    <img src="..." class="profile-pic">
+                @endif
             </div>
             <h5 class="text-body-tertiary mb-0">Hi There, I'm</h5>
             {{-- $data->name --}}
-            <h3 class="display-2 fw-bold">{{ $data->name }}</h3>
+            <h3 class="display-2 fw-bold">
+                @if (!empty($data->name))
+                    {{ $data->name }}
+                @else
+                    ...
+                @endif
+            </h3>
             <h3 class="fw-medium text-muted">
                 {{-- $data->profession --}}
-                <span class="typewrite" data-period="2500" data-type='[ "{{ $data->profession }}" ]'>
+                <span class="typewrite" data-period="2500" data-type='[ "
+                    @if (!empty($data->profession))
+                        {{ $data->profession }}
+                    @else
+                        ...
+                    @endif
+                " ]'>
                     <span class="wrap"></span>
                 </span>
             </h3>
@@ -80,15 +108,11 @@
                             <h5 class="box-title pb-4">About me</h5>
                             {{-- $data->about --}}
                             <p class="lead text-black-50">
-                                A dedicated and ambitious Computer Science student at the University of Lampung with a
-                                strong focus on
-                                software development. Experienced in building scalable, efficient applications using
-                                modern technologies
-                                such as JavaScript, React, Node.js, and Laravel. Adept at both frontend and backend
-                                development, with a
-                                particular interest in cloud computing and AI-driven solutions. Eager to apply and
-                                expand my technical
-                                expertise through innovative projects and collaborative environments.
+                                @if (!empty($data->about))
+                                    {{ $data->about }}
+                                @else
+                                    ...
+                                @endif
                             </p>
                         </div>
                     </div>

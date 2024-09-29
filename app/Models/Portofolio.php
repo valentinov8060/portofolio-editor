@@ -11,5 +11,5 @@ class Portofolio extends Model
 
     protected $table = 'portofolio';
     protected $primaryKey = 'id'; 
-    protected $fillable = ['name', 'profession', 'profile_picture', 'mime_type'];
+    protected $fillable = ['name', 'profession', 'profile_picture', 'mime_type', 'about'];
 }

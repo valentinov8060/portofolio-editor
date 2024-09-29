@@ -66,14 +66,14 @@
                                         </div>
                                         <div class="input-group mb-3">
                                             <label class="input-group-text" for="profile_pictureInput">Profile Picture</label>
-                                            <input type="file" class="form-control" id="profile_pictureInput" accept="png, jpeg, jpg, gif" name="profile_picture">
+                                            <input type="file" class="form-control" id="profile_pictureInput" accept=".png, .jpeg, .jpg, .gif" name="profile_picture" onchange="checkFileSize(this)">
                                         </div>
                                         <button type="submit" class="btn btn-success">Save</button>
                                     </form>                            
                                 </div>  
                                 {{-- Tampilkan gambar profil jika ada --}}
+                                <h6>Your Profile Picture:</h6>
                                 @if (!empty($data->profile_picture))
-                                    <h6>Your Profile Picture:</h6>
                                     <img src="data:{{ $data->mime_type }};base64,{{ $data->profile_picture }}" alt="Profile Picture" width="200" height="200">
                                 @else
                                     <p>No profile picture available</p>
@@ -82,6 +82,14 @@
                             <li class="list-group-item">
                                 {{-- About form--}}
                                 <h4>About from:</h4>
+                                <form action="{{ route('about') }}" method="POST">
+                                    @csrf
+                                    <div class="input-group mb-3">
+                                        <textarea class="form-control" rows="3" id="aboutInput" name="about">{{ !empty($data->about) ? $data->about : '' }}</textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </form>
+                                
                             </li>
                             <li class="list-group-item">
                                 {{-- Skill form--}}
@@ -106,5 +114,17 @@
     <!-- Optional JavaScript; choose one of the two! -->
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-2HjD8LKo5QIsE5KChjArAxYGVJgPphA3v8N5U1PjM97L0VbFYg9gpNYUBs8LxK5S" crossorigin="anonymous"></script>
+    <script>
+        function checkFileSize(input) {
+            var file = input.files[0];
+            var sizeInBytes = file.size;
+            var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+        
+            if (sizeInBytes > maxSize) {
+                alert("Image size cannot exceed 2 MB.");
+                input.value = ""; // Clear the file input
+            }
+        }
+    </script>
 </body>
 </html>

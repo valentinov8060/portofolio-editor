@@ -20,6 +20,7 @@ class CreatePortofolioTable extends Migration
             $table->string('profession', 100)->nullable(); // Kolom untuk profesi dengan batasan 100 karakter
             $table->binary('profile_picture')->nullable(); 
             $table->enum('mime_type', ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'])->nullable();
+            $table->text('about')->nullable();
             $table->timestamps();
         });
 
