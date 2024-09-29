@@ -22,26 +22,81 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-xl-8">
                 <div class="card mt-5">
                     <div class="card-header text-center">
                         <h3>Editor</h3>
                     </div>
                     <div class="card-body">
-                        {{-- Menampilkan pesan sukses jika ada --}}
-                        @if (session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endif
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                {{-- Menampilkan pesan sukses jika ada --}}
+                                @if (session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+                                {{-- Logout button --}}
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <div class="d-grid mb-3">
+                                        <button type="submit" class="btn btn-danger">Logout</button>
+                                    </div>
+                                </form>
+                                {{-- back button --}}
+                                <div class="d-grid mb-3">
+                                    <a href="{{ route('portofolio page') }}" class="btn btn-success">
+                                        Back to portofolio
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                {{-- Profile form --}}
+                                <h4>Profile from:</h4>
+                                <div class="d-grid mb-3">
+                                    <form action="{{ route('profile') }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="nameInput">Name</span>
+                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="nameInput" name="name" value="{{ !empty($data->name) ? $data->name : '' }}">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="professionInput">Profession</span>
+                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="professionInput" name="profession" value="{{ !empty($data->profession) ? $data->profession : '' }}">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="profile_pictureInput">Profile Picture</label>
+                                            <input type="file" class="form-control" id="profile_pictureInput" accept="png, jpeg, jpg, gif" name="profile_picture">
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Save</button>
+                                    </form>                            
+                                </div>  
+                                {{-- Tampilkan gambar profil jika ada --}}
+                                @if (!empty($data->profile_picture))
+                                    <h6>Your Profile Picture:</h6>
+                                    <img src="data:{{ $data->mime_type }};base64,{{ $data->profile_picture }}" alt="Profile Picture" width="200" height="200">
+                                @else
+                                    <p>No profile picture available</p>
+                                @endif
+                            </li>
+                            <li class="list-group-item">
+                                {{-- About form--}}
+                                <h4>About from:</h4>
+                            </li>
+                            <li class="list-group-item">
+                                {{-- Skill form--}}
+                                <h4>Skill from:</h4>
+                            </li>
+                            <li class="list-group-item">
+                                {{-- My Projects form--}}
+                                <h4>My Projects from:</h4>
+                            </li>
+                            <li class="list-group-item">
+                                {{-- Contact form--}}
+                                <h4>Contact from:</h4>
+                            </li>
+                        </ul>
 
-                        {{-- Logout button --}}
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-danger">Logout</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>

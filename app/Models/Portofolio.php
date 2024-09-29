@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Portofolio extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'portofolio';
     protected $primaryKey = 'id'; 
-    protected $fillable = ['username', 'password'];
+    protected $fillable = ['name', 'profession', 'profile_picture', 'mime_type'];
 }

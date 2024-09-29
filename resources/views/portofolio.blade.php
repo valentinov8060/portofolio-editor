@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/icon/x-icon" href="{{ asset('img/icons/person-vcard-fill.svg') }}">
     {{-- $data->name --}}
-    <title>Bill Valentinov</title>
+    <title>{{ $data->name }}</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
@@ -20,7 +20,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top vv">
         <div class="container">
             {{-- $data->name --}}
-            <a class="navbar-brand fw-bolder" href="{{ route('login page') }}">Bill Valentinov</a>
+            <a class="navbar-brand fw-bolder" href="{{ route('login page') }}">{{ $data->name }}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -52,14 +52,15 @@
     <section id="home" class="page-section">
         <div class="text-center mm">
             <div class="pb-3">
-                <img src="img/foto profil 2.jpg" class="profile-pic">
+                {{-- $data->profile_picture --}}
+                <img src="data:{{ $data->mime_type }};base64,{{ $data->profile_picture }}" class="profile-pic">
             </div>
             <h5 class="text-body-tertiary mb-0">Hi There, I'm</h5>
             {{-- $data->name --}}
-            <h3 class="display-2 fw-bold">Bill Valentinov</h3>
+            <h3 class="display-2 fw-bold">{{ $data->name }}</h3>
             <h3 class="fw-medium text-muted">
                 {{-- $data->profession --}}
-                <span class="typewrite" data-period="2500" data-type='[ "A Computer Science student" ]'>
+                <span class="typewrite" data-period="2500" data-type='[ "{{ $data->profession }}" ]'>
                     <span class="wrap"></span>
                 </span>
             </h3>

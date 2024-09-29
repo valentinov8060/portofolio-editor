@@ -12,4 +12,7 @@ Route::post('/login', [PortofolioController::class, 'login'])->name('login');
 Route::middleware('auth')->group(function () {
     Route::get('/editor', [PortofolioController::class, 'showEditor'])->name('editor page');
     Route::post('/logout', [PortofolioController::class, 'logout'])->name('logout');
+
+    /* Editor Routes */
+    Route::post('/profile', [PortofolioController::class, 'profile'])->name('profile');
 });

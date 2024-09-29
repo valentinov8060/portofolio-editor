@@ -15,13 +15,26 @@ class CreatePortofolioTable extends Migration
     public function up()
     {
         Schema::create('portofolio', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('profession');
+            $table->id(); // Kolom id
+            $table->string('name', 100)->nullable(); // Kolom untuk nama dengan batasan 100 karakter
+            $table->string('profession', 100)->nullable(); // Kolom untuk profesi dengan batasan 100 karakter
+            $table->binary('profile_picture')->nullable(); 
+            $table->enum('mime_type', ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'])->nullable();
+            $table->timestamps();
         });
 
         // Tambahkan constraint agar hanya satu baris data yang diperbolehkan
         DB::statement('ALTER TABLE portofolio ADD CONSTRAINT single_row CHECK (id = 1)');
+
+        // Menambahkan data default dengan id 1
+        DB::table('portofolio')->insert([
+            'id' => 1,
+            'name' => null,
+            'profession' => null,
+            'profile_picture' => null, // Atur null atau masukkan data gambar di sini
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     /**

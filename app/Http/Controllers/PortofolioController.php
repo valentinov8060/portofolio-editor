@@ -3,16 +3,35 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Portofolio;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log; 
+use Exception;
 
 class PortofolioController extends Controller
 {
     public function showPortofolio()
     {
-        return view('portofolio');
+        $data = Portofolio::find(1);
+    
+        // Cek apakah profile_picture ada
+        if (!empty($data->profile_picture)) {
+            // Jika $data->profile_picture adalah resource
+            if (is_resource($data->profile_picture)) {
+                $data->profile_picture = stream_get_contents($data->profile_picture);
+            } 
+            // Ubah dari hex ke biner
+            $data->profile_picture = hex2bin($data->profile_picture);
+            // Encode data biner ke Base64
+            $data->profile_picture = base64_encode($data->profile_picture);
+        }
+    
+        return view('portofolio', compact('data'));
     }
 
+    /* auth function */
     public function showLogin()
     {
         // Jika user sudah login, redirect ke halaman editor
@@ -49,12 +68,66 @@ class PortofolioController extends Controller
 
     public function showEditor()
     {
-        return view('editor');
+        $data = Portofolio::find(1);
+    
+        // Cek apakah profile_picture ada
+        if (!empty($data->profile_picture)) {
+            // Jika $data->profile_picture adalah resource
+            if (is_resource($data->profile_picture)) {
+                $data->profile_picture = stream_get_contents($data->profile_picture);
+            } 
+            // Ubah dari hex ke biner
+            $data->profile_picture = hex2bin($data->profile_picture);
+            // Encode data biner ke Base64
+            $data->profile_picture = base64_encode($data->profile_picture);
+        }
+    
+        return view('editor', compact('data'));
     }
 
-    public function logout()
+    /* editor function */
+    public function profile(Request $request)
     {
-        Auth::logout();
-        return redirect()->route('login page')->with('success', 'Logout successful!');
+        $validation = $request->validate([
+            'name' => 'nullable|string|max:100',
+            'profession' => 'nullable|string|max:100',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $profile = Portofolio::where('id', 1)->first();
+
+            $data = [
+                'name' => $validation['name'],
+                'profession' => $validation['profession'],
+                'updated_at' => now(),
+            ];
+
+            // Cek jika ada file gambar yang diupload
+            if ($request->hasFile('profile_picture')) {
+                $file = $request->file('profile_picture');
+                $imageBinary = file_get_contents($file->getRealPath());
+                $imageBinary = bin2hex($imageBinary); 
+
+                // Ambil mimeType dari file yang diupload
+                $mimeType = $file->getClientMimeType();
+
+                // Simpan data gambar dan mimeType ke database
+                $data['profile_picture'] = $imageBinary;
+                $data['mime_type'] = $mimeType;
+            }
+
+            $profile->update($data);
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Profile updated successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            dd($e);
+            Log::error('Failed to update profile: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Failed to update profile: ' . $e->getMessage());
+        }
     }
+
 }
