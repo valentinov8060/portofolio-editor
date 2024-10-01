@@ -99,6 +99,11 @@ class PortofolioController extends Controller
         if (!empty($data->skills)) {
             $data->skills = json_decode($data->skills);
         }
+
+        // Cek apakah projects ada
+        if (!empty($data->projects)) {
+            $data->projects = json_decode($data->projects);
+        }
     
         return view('editor', compact('data'));
     }
@@ -271,6 +276,28 @@ class PortofolioController extends Controller
             DB::rollBack();
             Log::error('Failed to store project: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to add project: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteProject($index)
+    {
+        try {
+            DB::beginTransaction();
+            $portfolio = Portofolio::find(1);
+            $existingProjects = json_decode($portfolio->projects);
+            if (count($existingProjects)-1 == 0) {
+                $existingProjects = [];
+            } else {
+                array_splice($existingProjects, $index, 1);
+            }
+            $portfolio->projects = $existingProjects;
+            $portfolio->save();
+            DB::commit();
+            return redirect()->back()->with('success', 'Project deleted successfully.');
+        } catch (Exception $e) {
+            Log::error('Failed to delete project: '.$e->getMessage());
+            dd($e);
+            return redirect()->back()->with('error', 'Failed to delete project: ' . $e->getMessage());
         }
     }
 }

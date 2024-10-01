@@ -120,7 +120,7 @@
                                                 <p class="text-body-tertiary">{{ $skill->desc }}</p>
                                             </div>
                                         </div>
-                                        <a href="{{ route('skills.delete', $loop->index) }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this skill?')">Delete Skill</a>
+                                        <a href="{{ route('skill.delete', $loop->index) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this skill?')">Delete Skill</a>
                                     @endforeach
                                 @else
                                     <p>Really no skills available? you're suck.</p>
@@ -152,6 +152,26 @@
                                         <button type="submit" class="btn btn-success">Add Project</button>
                                     </form>
                                 </div>
+
+                                <h6>Your Projects :</h6>
+                                @if (!empty($data->projects))
+                                    <div class="container">
+                                        <div class="row">
+                                            @foreach ($data->projects as $project)
+                                                <div class="col-md-6 col-lg-4 tablet-lg-top-30">
+                                                    <div class="card my-3">
+                                                        <div class="card-body p-4">
+                                                            <h4 class="pb-2">{{ $project->title }}</h4>
+                                                            <p class="pb-3 text-black-50">{{ $project->desc }}</p>
+                                                            <a href="{{ $project->link }}" target="_blank" class="btn btn-sm btn-dark mb-1">Link to project</a>
+                                                            <a href="{{ route('project.delete', $loop->index) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this project?')">Delete Project</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
                             </li>
                             <li class="list-group-item">
                                 {{-- Contact form--}}
