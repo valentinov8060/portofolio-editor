@@ -116,15 +116,14 @@
                                     @foreach($data->skills as $skill)
                                         <div class="col-xl-12 aos-init aos-animate">
                                             <div class="p-4 text-center nn">
-                                                {{-- $data->skill->title --}}
                                                 <h5 class="pb-2 ls-2">{{ $skill->title }}</h5>
-                                                {{-- $data->skill->description --}}
-                                                <p class="text-body-tertiary">
-                                                    {{ $skill->desc }}
-                                                </p>
+                                                <p class="text-body-tertiary">{{ $skill->desc }}</p>
                                             </div>
                                         </div>
+                                        <a href="{{ route('skills.delete', $loop->index) }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this skill?')">Delete Skill</a>
                                     @endforeach
+                                @else
+                                    <p>Really no skills available? you're suck.</p>
                                 @endif
                             </li>
                             <li class="list-group-item">

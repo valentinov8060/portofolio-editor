@@ -192,6 +192,7 @@ class PortofolioController extends Controller
         
             // Cek apakah kolom 'skills' sudah berisi data atau belum, jika belum, inisialisasi sebagai array kosong
             $existingSkills = json_decode($portfolio->skills) ?? [];
+            /* dd($existingSkills); */
         
             // Tambahkan skill baru ke array yang sudah ada
             $existingSkills[] = $skill;
@@ -206,6 +207,29 @@ class PortofolioController extends Controller
             Log::error('Failed to add skill: '.$e->getMessage());
             dd($e);
             return redirect()->back()->with('error', 'Failed to add skill: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteSkill($index)
+    {
+        try {
+            DB::beginTransaction();
+            $portfolio = Portofolio::find(1);
+            $existingSkills = json_decode($portfolio->skills);
+            /* dd(count($existingSkills)-1); */
+            if (count($existingSkills)-1 == 0) {
+                $existingSkills = [];
+            } else {
+                array_splice($existingSkills, $index, 1);
+            }
+            $portfolio->skills = $existingSkills;
+            $portfolio->save();
+            DB::commit();
+            return redirect()->back()->with('success', 'Skill deleted successfully.');
+        } catch (Exception $e) {
+            Log::error('Failed to delete skill: '.$e->getMessage());
+            dd($e);
+            return redirect()->back()->with('error', 'Failed to delete skill: ' . $e->getMessage());
         }
     }
 
