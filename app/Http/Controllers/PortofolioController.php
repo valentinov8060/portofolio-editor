@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Portofolio;
 use App\Http\Controllers\Skills;
 use App\Http\Controllers\Projects;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Contacts;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -39,6 +39,10 @@ class PortofolioController extends Controller
         // Cek apakah projects ada
         if (!empty($data->projects)) {
             $data->projects = json_decode($data->projects);
+        }
+
+        if (!empty($data->contacts)) {
+            $data->contacts = json_decode($data->contacts);
         }
     
         return view('portofolio', compact('data'));
@@ -103,6 +107,10 @@ class PortofolioController extends Controller
         // Cek apakah projects ada
         if (!empty($data->projects)) {
             $data->projects = json_decode($data->projects);
+        }
+
+        if (!empty($data->contacts)) {
+            $data->contacts = json_decode($data->contacts);
         }
     
         return view('editor', compact('data'));
@@ -298,6 +306,37 @@ class PortofolioController extends Controller
             Log::error('Failed to delete project: '.$e->getMessage());
             dd($e);
             return redirect()->back()->with('error', 'Failed to delete project: ' . $e->getMessage());
+        }
+    }
+
+    public function contacts(Request $request)
+    {
+        $request->validate([
+            'instagram' => 'nullable|url',
+            'linkedin' => 'nullable|url',
+            'email' => 'nullable|email',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $portfolio = Portofolio::find(1);
+
+            $contact = new Contacts();
+            $contact->instagram = $request->instagram;
+            $contact->linkedin = $request->linkedin;
+            $contact->email = $request->email;
+            
+            $portfolio->contacts = json_encode($contact);
+            
+            $portfolio->save();
+            /* dd($contact); */
+            DB::commit();
+            return redirect()->back()->with('success', 'Profile updated successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to update profile: '.$e->getMessage());
+            dd($e);
+            return redirect()->back()->with('error', 'Failed to update profile: ' . $e->getMessage());
         }
     }
 }

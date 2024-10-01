@@ -176,6 +176,24 @@
                             <li class="list-group-item">
                                 {{-- Contact form--}}
                                 <h4>Contacts :</h4>
+                                <div class="d-grid mb-3">
+                                    <form action="{{ route('contacts') }}" method="POST">
+                                        @csrf
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="instagramInput">Link to your Instagram</span>
+                                            <input type="url" class="form-control" aria-label="Instagram input" aria-describedby="instagramInput" name="instagram" value="{{ !empty($data->contacts->instagram) ? $data->contacts->instagram : '' }}">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="linkedinInput">Link to your LinkedIn</span>
+                                            <input type="url" class="form-control" aria-label="LinkedIn input" aria-describedby="linkedinInput" name="linkedin" value="{{ !empty($data->contacts->linkedin) ? $data->contacts->linkedin : '' }}">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="emailInput">Email</span>
+                                            <input type="email" class="form-control" aria-label="Email input" aria-describedby="emailInput" name="email" value="{{ !empty($data->contacts->email) ? $data->contacts->email : '' }}">
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Save</button>
+                                    </form>
+                                </div>  
                             </li>
                         </ul>
 
