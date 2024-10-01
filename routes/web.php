@@ -16,4 +16,5 @@ Route::middleware('auth')->group(function () {
     /* Editor Routes */
     Route::post('/profile', [PortofolioController::class, 'profile'])->name('profile');
     Route::post('/about', [PortofolioController::class, 'about'])->name('about');
+    Route::post('/skills', [PortofolioController::class, 'skills'])->name('skills');
 });

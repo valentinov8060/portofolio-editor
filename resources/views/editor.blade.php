@@ -52,7 +52,7 @@
                             </li>
                             <li class="list-group-item">
                                 {{-- Profile form --}}
-                                <h4>Profile from:</h4>
+                                <h4>Profile :</h4>
                                 <div class="d-grid mb-3">
                                     <form action="{{ route('profile') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
@@ -72,7 +72,7 @@
                                     </form>                            
                                 </div>  
                                 {{-- Tampilkan gambar profil jika ada --}}
-                                <h6>Your Profile Picture:</h6>
+                                <h6>Your Profile Picture :</h6>
                                 @if (!empty($data->profile_picture))
                                     <img src="data:{{ $data->mime_type }};base64,{{ $data->profile_picture }}" alt="Profile Picture" width="200" height="200">
                                 @else
@@ -81,7 +81,7 @@
                             </li>
                             <li class="list-group-item">
                                 {{-- About form--}}
-                                <h4>About from:</h4>
+                                <h4>About :</h4>
                                 <form action="{{ route('about') }}" method="POST">
                                     @csrf
                                     <div class="input-group mb-3">
@@ -93,15 +93,47 @@
                             </li>
                             <li class="list-group-item">
                                 {{-- Skill form--}}
-                                <h4>Skill from:</h4>
+                                <h4>Skills :</h4>
+                                <div class="d-grid mb-3">
+                                    <form action="{{ route('skills') }}" method="POST">
+                                        @csrf
+                                        <div class="input-group mb-3">
+                                            <div class="input-group mb-3">
+                                                <label class="input-group-text" for="skillTitleInput">Title</label>
+                                                <input type="text" name="title" id="skillTitleInput" class="form-control" placeholder="Title" required>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <label class="input-group-text" for="skillDescInput">Description</label>
+                                                <textarea class="form-control" rows="3" id="skillDescInput" name="desc" required></textarea>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Add Skill</button>
+                                    </form>
+                                </div>
+
+                                <h6>Your Skills :</h6>
+                                @if(!empty($data->skills))
+                                    @foreach($data->skills as $skill)
+                                        <div class="col-xl-12 aos-init aos-animate">
+                                            <div class="p-4 text-center nn">
+                                                {{-- $data->skill->title --}}
+                                                <h5 class="pb-2 ls-2">{{ $skill->title }}</h5>
+                                                {{-- $data->skill->description --}}
+                                                <p class="text-body-tertiary">
+                                                    {{ $skill->desc }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </li>
                             <li class="list-group-item">
                                 {{-- My Projects form--}}
-                                <h4>My Projects from:</h4>
+                                <h4>My Projects :</h4>
                             </li>
                             <li class="list-group-item">
                                 {{-- Contact form--}}
-                                <h4>Contact from:</h4>
+                                <h4>Contacts :</h4>
                             </li>
                         </ul>
 

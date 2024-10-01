@@ -82,15 +82,15 @@
             </h3>
             <h3 class="fw-medium text-muted">
                 {{-- $data->profession --}}
-                <span class="typewrite" data-period="2500" data-type='[ "
-                    @if (!empty($data->profession))
-                        {{ $data->profession }}
-                    @else
-                        ...
-                    @endif
-                " ]'>
-                    <span class="wrap"></span>
-                </span>
+                @if (!empty($data->profession))
+                    <span class="typewrite" data-period="2500" data-type='[ "{{ $data->profession }}" ]'>
+                        <span class="wrap"></span>
+                    </span>
+                @else
+                    <span class="typewrite" data-period="2500" data-type='[ "..." ]'>
+                        <span class="wrap"></span>
+                    </span>
+                @endif
             </h3>
         </div>
     </section>
@@ -129,20 +129,20 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-xl-12 aos-init aos-animate">
-                        <div class="p-4 text-center nn">
-                            {{-- $data->skill->title --}}
-                            <h5 class="pb-2 ls-2">Currently I Learning</h5>
-                            {{-- $data->skill->description --}}
-                            <p class="text-body-tertiary">
-                                HTML, CSS, JavaScript, TypeScript,
-                                Bootstrap, Node.js, Express, MySQL, MongoDB, React, React Native, A-Frame, Laravel,
-                                Next.js,
-                                Jest, Supertest, Git
-                            </p>
-                        </div>
-                    </div>
-
+                    @if(!empty($data->skills))
+                        @foreach($data->skills as $skill)
+                            <div class="col-xl-12 aos-init aos-animate">
+                                <div class="p-4 text-center nn">
+                                    {{-- $data->skill->title --}}
+                                    <h5 class="pb-2 ls-2">{{ $skill->title }}</h5>
+                                    {{-- $data->skill->description --}}
+                                    <p class="text-body-tertiary">
+                                        {{ $skill->desc }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </div>

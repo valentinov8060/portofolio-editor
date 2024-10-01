@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Portofolio;
+use App\Http\Controllers\Skills;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +27,11 @@ class PortofolioController extends Controller
             $data->profile_picture = hex2bin($data->profile_picture);
             // Encode data biner ke Base64
             $data->profile_picture = base64_encode($data->profile_picture);
+        }
+    
+        // Cek apakah skills ada
+        if (!empty($data->skills)) {
+            $data->skills = json_decode($data->skills);
         }
     
         return view('portofolio', compact('data'));
@@ -80,6 +86,11 @@ class PortofolioController extends Controller
             $data->profile_picture = hex2bin($data->profile_picture);
             // Encode data biner ke Base64
             $data->profile_picture = base64_encode($data->profile_picture);
+        }
+    
+        // Cek apakah skills ada
+        if (!empty($data->skills)) {
+            $data->skills = json_decode($data->skills);
         }
     
         return view('editor', compact('data'));
@@ -160,4 +171,42 @@ class PortofolioController extends Controller
             return redirect()->back()->with('error', 'Failed to update about: ' . $e->getMessage());
         }
     }
+
+    public function skills(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'desc'  => 'required|string|max:255',
+        ]);
+    
+        try {
+            DB::beginTransaction();
+            // Ambil data dari form
+            $skill = new Skills();
+            $skill->title = $request->title;
+            $skill->desc = $request->desc;
+        
+            // Ambil data dari database
+            $portfolio = Portofolio::find(1);
+        
+            // Cek apakah kolom 'skills' sudah berisi data atau belum, jika belum, inisialisasi sebagai array kosong
+            $existingSkills = json_decode($portfolio->skills) ?? [];
+        
+            // Tambahkan skill baru ke array yang sudah ada
+            $existingSkills[] = $skill;
+        
+            // Simpan kembali ke kolom JSON
+            $portfolio->skills = $existingSkills;
+            $portfolio->save();
+        
+            DB::commit();
+            return redirect()->back()->with('success', 'Skill added successfully.');
+        } catch (Exception $e) {
+            Log::error('Failed to add skill: '.$e->getMessage());
+            dd($e);
+            return redirect()->back()->with('error', 'Failed to add skill: ' . $e->getMessage());
+        }
+    }
+
 }
