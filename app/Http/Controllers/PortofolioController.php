@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Portofolio;
 use App\Http\Controllers\Skills;
+use App\Http\Controllers\Projects;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -32,6 +34,11 @@ class PortofolioController extends Controller
         // Cek apakah skills ada
         if (!empty($data->skills)) {
             $data->skills = json_decode($data->skills);
+        }
+
+        // Cek apakah projects ada
+        if (!empty($data->projects)) {
+            $data->projects = json_decode($data->projects);
         }
     
         return view('portofolio', compact('data'));
@@ -192,7 +199,6 @@ class PortofolioController extends Controller
         
             // Cek apakah kolom 'skills' sudah berisi data atau belum, jika belum, inisialisasi sebagai array kosong
             $existingSkills = json_decode($portfolio->skills) ?? [];
-            /* dd($existingSkills); */
         
             // Tambahkan skill baru ke array yang sudah ada
             $existingSkills[] = $skill;
@@ -216,7 +222,6 @@ class PortofolioController extends Controller
             DB::beginTransaction();
             $portfolio = Portofolio::find(1);
             $existingSkills = json_decode($portfolio->skills);
-            /* dd(count($existingSkills)-1); */
             if (count($existingSkills)-1 == 0) {
                 $existingSkills = [];
             } else {
@@ -233,4 +238,39 @@ class PortofolioController extends Controller
         }
     }
 
+    public function projects(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'desc' => 'required|string',
+            'link' => 'required|url',
+        ]);
+    
+        try {
+            DB::beginTransaction();
+    
+            // Siapkan data project
+            $project = new Projects();
+            $project->title = $request->title;
+            $project->desc = $request->desc;
+            $project->link = $request->link;
+    
+            // Ambil data existing dari database
+            $portfolio = Portofolio::find(1);
+            $existingProjects = json_decode($portfolio->projects, true) ?? [];
+    
+            // Simpan ke database
+            $existingProjects[] = $project;
+            $portfolio->projects = $existingProjects;
+            $portfolio->save();
+    
+            DB::commit();
+            return redirect()->back()->with('success', 'Project added successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to store project: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to add project: ' . $e->getMessage());
+        }
+    }
 }

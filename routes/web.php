@@ -18,4 +18,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/about', [PortofolioController::class, 'about'])->name('about');
     Route::post('/skills', [PortofolioController::class, 'skills'])->name('skills');
     Route::get('/skills/delete/{index}', [PortofolioController::class, 'deleteSkill'])->name('skills.delete');
+    Route::post('/projects', [PortofolioController::class, 'projects'])->name('projects');
 });

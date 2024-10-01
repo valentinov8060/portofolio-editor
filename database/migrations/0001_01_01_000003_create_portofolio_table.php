@@ -22,6 +22,8 @@ class CreatePortofolioTable extends Migration
             $table->enum('mime_type', ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'])->nullable();
             $table->text('about')->nullable();
             $table->jsonb('skills')->nullable();
+            $table->jsonb('projects')->nullable();
+            $table->jsonb('contacts')->nullable();
             $table->timestamps();
         });
 

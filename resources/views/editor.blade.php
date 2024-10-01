@@ -129,6 +129,29 @@
                             <li class="list-group-item">
                                 {{-- My Projects form--}}
                                 <h4>My Projects :</h4>
+                                <div class="d-grid mb-3">
+                                    <form action="{{ route('projects') }}" method="POST">
+                                        @csrf
+                                        <div class="input-group mb-3">
+                                            <!-- Title Input -->
+                                            <div class="input-group mb-3">
+                                                <label class="input-group-text" for="projectTitleInput">Title</label>
+                                                <input type="text" name="title" id="projectTitleInput" class="form-control" placeholder="Title" required>
+                                            </div>
+                                            <!-- Description Input -->
+                                            <div class="input-group mb-3">
+                                                <label class="input-group-text" for="projectDescInput">Description</label>
+                                                <textarea class="form-control" rows="3" id="projectDescInput" name="desc" required></textarea>
+                                            </div>
+                                            <!-- Link Input (Type URL) -->
+                                            <div class="input-group mb-3">
+                                                <label class="input-group-text" for="projectLinkInput">Link</label>
+                                                <input type="url" name="link" id="projectLinkInput" class="form-control" placeholder="Link to your project" required>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Add Project</button>
+                                    </form>
+                                </div>
                             </li>
                             <li class="list-group-item">
                                 {{-- Contact form--}}

@@ -154,34 +154,23 @@
             <div class="text-center">
                 <h3 class="text-uppercase fw-900 display-4 pb-5">My Projects</h3>
             </div>
-
             <div class="container">
                 <div class="row">
-
-                    <div class="col-md-6 col-lg-4 tablet-lg-top-30">
-                        <div class="card my-3">
-                            {{-- $data->project->image --}}
-                            <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vuejs/vuejs-original-wordmark.svg" class="card-img-top" alt="..." height="200" >
-                            <div class="card-body p-4">
-                                {{-- $data->project->title --}}
-                                <h4 class="pb-2">react-native-schedule-app</h4>
-                                {{-- $data->project->desc --}}
-                                <p class="pb-3 text-black-50">
-                                    An application created to record student class schedules. Built with React Native
-                                    and SQLite. The backend was developed with Express and MySQL. The backend code is
-                                    available in the <a href="https://github.com/valentinov8060/schedule-app"
-                                        target="_blank">schedule-app</a> repository.
-                                </p>
-                                {{-- $data->project->link --}}
-                                <a href="https://github.com/valentinov8060/react-native-schedule-app" target="_blank"
-                                    class="btn btn-sm btn-dark">Link to project</a>
+                    @if (!empty($data->projects))
+                        @foreach ($data->projects as $project)
+                            <div class="col-md-6 col-lg-4 tablet-lg-top-30">
+                                <div class="card my-3">
+                                    <div class="card-body p-4">
+                                        <h4 class="pb-2">{{ $project->title }}</h4>
+                                        <p class="pb-3 text-black-50">{{ $project->desc }}</p>
+                                        <a href="{{ $project->link }}" target="_blank" class="btn btn-sm btn-dark">Link to project</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
+                        @endforeach
+                    @endif
                 </div>
             </div>
-
         </div>
     </section>
     <!-- ----------------------------Portfolio section ends here------------------------ -->
