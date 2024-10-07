@@ -7,6 +7,16 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Description
+
+It's portofolio editor website. 
+
+## Project setup
+
+1. Create a user with UserFactory.
+2. Create a portfolio table row with PortofolioFactory.
+2. Change the userId value in the PortofolioController according to the value when creating the user.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
