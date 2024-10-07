@@ -15,10 +15,19 @@ use Exception;
 
 class PortofolioController extends Controller
 {
+    protected $userId;
+
+    public function __construct()
+    {
+        // Tetapkan user ID yang ingin Anda gunakan
+        $this->userId = 3; // Ganti sesuai dengan user ID yang Anda inginkan
+    }
+
     public function showPortofolio()
     {
-        $data = Portofolio::find(1);
-    
+        // Ambil data portofolio berdasarkan user_id
+        $data = Portofolio::where('user_id', $this->userId)->first();
+
         // Cek apakah profile_picture ada
         if (!empty($data->profile_picture)) {
             // Jika $data->profile_picture adalah resource
@@ -30,7 +39,7 @@ class PortofolioController extends Controller
             // Encode data biner ke Base64
             $data->profile_picture = base64_encode($data->profile_picture);
         }
-    
+
         // Cek apakah skills ada
         if (!empty($data->skills)) {
             $data->skills = json_decode($data->skills);
@@ -41,10 +50,11 @@ class PortofolioController extends Controller
             $data->projects = json_decode($data->projects);
         }
 
+        // Cek apakah contacts ada
         if (!empty($data->contacts)) {
             $data->contacts = json_decode($data->contacts);
         }
-    
+
         return view('portofolio', compact('data'));
     }
 
@@ -71,7 +81,7 @@ class PortofolioController extends Controller
         $user = User::where('name', $request->name)->first();
 
         // Jika pengguna ditemukan dan password cocok
-        if ($user && Hash::check($request->password, $user->password)) {
+        if ($user && Hash::check($request->password, $user->password) && $user->id == $this->userId) {
             // Set session dan redirect ke halaman editor
             Auth::login($user);
             return redirect()->route('editor page')->with('success', 'Login success!');
@@ -85,7 +95,7 @@ class PortofolioController extends Controller
 
     public function showEditor()
     {
-        $data = Portofolio::find(1);
+        $data = Portofolio::where('user_id', $this->userId)->first();
     
         // Cek apakah profile_picture ada
         if (!empty($data->profile_picture)) {
@@ -133,7 +143,7 @@ class PortofolioController extends Controller
 
         try {
             DB::beginTransaction();
-            $profile = Portofolio::where('id', 1)->first();
+            $portofolio = Portofolio::where('user_id', $this->userId)->first();
 
             $data = [
                 'name' => $validation['name'],
@@ -155,7 +165,7 @@ class PortofolioController extends Controller
                 $data['mime_type'] = $mimeType;
             }
 
-            $profile->update($data);
+            $portofolio->update($data);
 
             DB::commit();
             return redirect()->back()->with('success', 'Profile updated successfully.');
@@ -174,14 +184,14 @@ class PortofolioController extends Controller
 
         try {
             DB::beginTransaction();
-            $profile = Portofolio::where('id', 1)->first();
+            $portofolio = Portofolio::where('user_id', $this->userId)->first();
 
             $data = [
                 'about' => $validation['about'],
                 'updated_at' => now(),
             ];
 
-            $profile->update($data);
+            $portofolio->update($data);
 
             DB::commit();
             return redirect()->back()->with('success', 'About updated successfully.');
@@ -208,17 +218,17 @@ class PortofolioController extends Controller
             $skill->desc = $request->desc;
         
             // Ambil data dari database
-            $portfolio = Portofolio::find(1);
+            $portofolio = Portofolio::where('user_id', $this->userId)->first();
         
             // Cek apakah kolom 'skills' sudah berisi data atau belum, jika belum, inisialisasi sebagai array kosong
-            $existingSkills = json_decode($portfolio->skills) ?? [];
+            $existingSkills = json_decode($portofolio->skills) ?? [];
         
             // Tambahkan skill baru ke array yang sudah ada
             $existingSkills[] = $skill;
         
             // Simpan kembali ke kolom JSON
-            $portfolio->skills = $existingSkills;
-            $portfolio->save();
+            $portofolio->skills = $existingSkills;
+            $portofolio->save();
         
             DB::commit();
             return redirect()->back()->with('success', 'Skill added successfully.');
@@ -233,15 +243,15 @@ class PortofolioController extends Controller
     {
         try {
             DB::beginTransaction();
-            $portfolio = Portofolio::find(1);
-            $existingSkills = json_decode($portfolio->skills);
+            $portofolio = Portofolio::where('user_id', $this->userId)->first();
+            $existingSkills = json_decode($portofolio->skills);
             if (count($existingSkills)-1 == 0) {
                 $existingSkills = [];
             } else {
                 array_splice($existingSkills, $index, 1);
             }
-            $portfolio->skills = $existingSkills;
-            $portfolio->save();
+            $portofolio->skills = $existingSkills;
+            $portofolio->save();
             DB::commit();
             return redirect()->back()->with('success', 'Skill deleted successfully.');
         } catch (Exception $e) {
@@ -270,13 +280,13 @@ class PortofolioController extends Controller
             $project->link = $request->link;
     
             // Ambil data existing dari database
-            $portfolio = Portofolio::find(1);
-            $existingProjects = json_decode($portfolio->projects, true) ?? [];
+            $portofolio = Portofolio::where('user_id', $this->userId)->first();
+            $existingProjects = json_decode($portofolio->projects, true) ?? [];
     
             // Simpan ke database
             $existingProjects[] = $project;
-            $portfolio->projects = $existingProjects;
-            $portfolio->save();
+            $portofolio->projects = $existingProjects;
+            $portofolio->save();
     
             DB::commit();
             return redirect()->back()->with('success', 'Project added successfully.');
@@ -291,15 +301,15 @@ class PortofolioController extends Controller
     {
         try {
             DB::beginTransaction();
-            $portfolio = Portofolio::find(1);
-            $existingProjects = json_decode($portfolio->projects);
+            $portofolio = Portofolio::where('user_id', $this->userId)->first();
+            $existingProjects = json_decode($portofolio->projects);
             if (count($existingProjects)-1 == 0) {
                 $existingProjects = [];
             } else {
                 array_splice($existingProjects, $index, 1);
             }
-            $portfolio->projects = $existingProjects;
-            $portfolio->save();
+            $portofolio->projects = $existingProjects;
+            $portofolio->save();
             DB::commit();
             return redirect()->back()->with('success', 'Project deleted successfully.');
         } catch (Exception $e) {
@@ -319,16 +329,16 @@ class PortofolioController extends Controller
 
         try {
             DB::beginTransaction();
-            $portfolio = Portofolio::find(1);
+            $portofolio = Portofolio::where('user_id', $this->userId)->first();
 
             $contact = new Contacts();
             $contact->instagram = $request->instagram;
             $contact->linkedin = $request->linkedin;
             $contact->email = $request->email;
             
-            $portfolio->contacts = json_encode($contact);
+            $portofolio->contacts = json_encode($contact);
             
-            $portfolio->save();
+            $portofolio->save();
             /* dd($contact); */
             DB::commit();
             return redirect()->back()->with('success', 'Profile updated successfully.');

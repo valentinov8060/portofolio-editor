@@ -58,11 +58,11 @@
                                         @csrf
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="nameInput">Name</span>
-                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="nameInput" name="name" value="{{ !empty($data->name) ? $data->name : '' }}">
+                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="nameInput" name="name" value="{{ !empty($data->name) ? $data->name : '' }}" maxlength="100">
                                         </div>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="professionInput">Profession</span>
-                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="professionInput" name="profession" value="{{ !empty($data->profession) ? $data->profession : '' }}">
+                                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="professionInput" name="profession" value="{{ !empty($data->profession) ? $data->profession : '' }}" maxlength="100">
                                         </div>
                                         <div class="input-group mb-3">
                                             <label class="input-group-text" for="profile_pictureInput">Profile Picture</label>
@@ -101,10 +101,12 @@
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="skillTitleInput">Title</label>
                                                 <input type="text" name="title" id="skillTitleInput" class="form-control" placeholder="Title" required>
+                                                <font style="color: red; display: flex; align-items: center; padding: 0;">*</font>
                                             </div>
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="skillDescInput">Description</label>
                                                 <textarea class="form-control" rows="3" id="skillDescInput" name="desc" required></textarea>
+                                                <font style="color: red; display: flex; align-items: center; padding: 0;">*</font>
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-success">Add Skill</button>
@@ -137,16 +139,19 @@
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="projectTitleInput">Title</label>
                                                 <input type="text" name="title" id="projectTitleInput" class="form-control" placeholder="Title" required>
+                                                <font style="color: red; display: flex; align-items: center; padding: 0;">*</font>
                                             </div>
                                             <!-- Description Input -->
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="projectDescInput">Description</label>
                                                 <textarea class="form-control" rows="3" id="projectDescInput" name="desc" required></textarea>
+                                                <font style="color: red; display: flex; align-items: center; padding: 0;">*</font>
                                             </div>
                                             <!-- Link Input (Type URL) -->
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="projectLinkInput">Link</label>
                                                 <input type="url" name="link" id="projectLinkInput" class="form-control" placeholder="Link to your project" required>
+                                                <font style="color: red; display: flex; align-items: center; padding: 0;">*</font>
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-success">Add Project</button>

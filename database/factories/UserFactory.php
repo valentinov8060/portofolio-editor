@@ -18,6 +18,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
+            // untuk menambahkan user
             'name' => 'admin',
             'password' => Hash::make('valentinov'), // Menggunakan hashing untuk password
         ];
