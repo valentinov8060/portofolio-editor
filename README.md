@@ -13,10 +13,8 @@ It's portofolio editor website.
 
 ## Project setup
 
-1. Create a user with UserFactory.
-2. Create a portfolio table row with PortofolioFactory.
-3. Change the userId value in the PortofolioController according to the value when creating the user.
-4. Make .env.local with this variabel:
+1. Create database according query DB.txt in database folder.
+2. Fill this variabel in .env:
 ```
 DB_CONNECTION=pgsql
 DB_HOST=...
@@ -24,7 +22,11 @@ DB_PORT=...
 DB_DATABASE=postgres
 DB_USERNAME=...
 DB_PASSWORD=...
+USER_ID=...
 ```
+3. Create a user and password with UserFactory.
+4. Create a portfolio table row with PortofolioFactory.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

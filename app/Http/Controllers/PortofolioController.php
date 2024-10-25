@@ -4,23 +4,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Portofolio;
-use App\Http\Controllers\Skills;
-use App\Http\Controllers\Projects;
-use App\Http\Controllers\Contacts;
+use App\Models\DTO\Skills;
+use App\Models\DTO\Projects;
+use App\Models\DTO\Contacts;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class PortofolioController extends Controller
 {
     protected $userId;
+    protected $validationValue;
 
     public function __construct()
     {
-        // Tetapkan user ID yang ingin Anda gunakan
-        $this->userId = 3; // Ganti sesuai dengan user ID yang Anda inginkan
+        $this->userId = env('USER_ID');
+
+        $this->validationValue = array(
+            'requiredString255' => 'required|string|max:255',
+        );
     }
 
     public function showPortofolio()
@@ -33,7 +37,7 @@ class PortofolioController extends Controller
             // Jika $data->profile_picture adalah resource
             if (is_resource($data->profile_picture)) {
                 $data->profile_picture = stream_get_contents($data->profile_picture);
-            } 
+            }
             // Ubah dari hex ke biner
             $data->profile_picture = hex2bin($data->profile_picture);
             // Encode data biner ke Base64
@@ -73,8 +77,8 @@ class PortofolioController extends Controller
     {
         // Validasi input
         $request->validate([
-            'name' => 'required|string',
-            'password' => 'required|string',
+            'name' => $this->validationValue['requiredString'],
+            'password' => $this->validationValue['requiredString'],
         ]);
 
         // Cek apakah ada pengguna dengan name yang diberikan
@@ -96,19 +100,19 @@ class PortofolioController extends Controller
     public function showEditor()
     {
         $data = Portofolio::where('user_id', $this->userId)->first();
-    
+
         // Cek apakah profile_picture ada
         if (!empty($data->profile_picture)) {
             // Jika $data->profile_picture adalah resource
             if (is_resource($data->profile_picture)) {
                 $data->profile_picture = stream_get_contents($data->profile_picture);
-            } 
+            }
             // Ubah dari hex ke biner
             $data->profile_picture = hex2bin($data->profile_picture);
             // Encode data biner ke Base64
             $data->profile_picture = base64_encode($data->profile_picture);
         }
-    
+
         // Cek apakah skills ada
         if (!empty($data->skills)) {
             $data->skills = json_decode($data->skills);
@@ -122,7 +126,7 @@ class PortofolioController extends Controller
         if (!empty($data->contacts)) {
             $data->contacts = json_decode($data->contacts);
         }
-    
+
         return view('editor', compact('data'));
     }
 
@@ -155,7 +159,7 @@ class PortofolioController extends Controller
             if ($request->hasFile('profile_picture')) {
                 $file = $request->file('profile_picture');
                 $imageBinary = file_get_contents($file->getRealPath());
-                $imageBinary = bin2hex($imageBinary); 
+                $imageBinary = bin2hex($imageBinary);
 
                 // Ambil mimeType dari file yang diupload
                 $mimeType = $file->getClientMimeType();
@@ -171,8 +175,7 @@ class PortofolioController extends Controller
             return redirect()->back()->with('success', 'Profile updated successfully.');
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error('Failed to update profile: '.$e->getMessage());
-            dd($e);
+            Log::error('Failed to update profile: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to update profile: ' . $e->getMessage());
         }
     }
@@ -196,8 +199,8 @@ class PortofolioController extends Controller
             DB::commit();
             return redirect()->back()->with('success', 'About updated successfully.');
         } catch (Exception $e) {
-            Log::error('Failed to update about: '.$e->getMessage());
-            dd($e);
+            DB::rollBack();
+            Log::error('Failed to update about: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to update about: ' . $e->getMessage());
         }
     }
@@ -206,35 +209,35 @@ class PortofolioController extends Controller
     {
         // Validasi input
         $request->validate([
-            'title' => 'required|string|max:255',
-            'desc'  => 'required|string|max:255',
+            'title' => $this->validationValue['requiredString255'],
+            'desc'  => $this->validationValue['requiredString255'],
         ]);
-    
+
         try {
             DB::beginTransaction();
             // Ambil data dari form
             $skill = new Skills();
             $skill->title = $request->title;
             $skill->desc = $request->desc;
-        
+
             // Ambil data dari database
             $portofolio = Portofolio::where('user_id', $this->userId)->first();
-        
+
             // Cek apakah kolom 'skills' sudah berisi data atau belum, jika belum, inisialisasi sebagai array kosong
             $existingSkills = json_decode($portofolio->skills) ?? [];
-        
+
             // Tambahkan skill baru ke array yang sudah ada
             $existingSkills[] = $skill;
-        
+
             // Simpan kembali ke kolom JSON
             $portofolio->skills = $existingSkills;
             $portofolio->save();
-        
+
             DB::commit();
             return redirect()->back()->with('success', 'Skill added successfully.');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('Failed to add skill: '.$e->getMessage());
-            dd($e);
             return redirect()->back()->with('error', 'Failed to add skill: ' . $e->getMessage());
         }
     }
@@ -255,8 +258,8 @@ class PortofolioController extends Controller
             DB::commit();
             return redirect()->back()->with('success', 'Skill deleted successfully.');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('Failed to delete skill: '.$e->getMessage());
-            dd($e);
             return redirect()->back()->with('error', 'Failed to delete skill: ' . $e->getMessage());
         }
     }
@@ -265,29 +268,29 @@ class PortofolioController extends Controller
     {
         // Validasi input
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => $this->validationValue['requiredString255'],
             'desc' => 'required|string',
             'link' => 'required|url',
         ]);
-    
+
         try {
             DB::beginTransaction();
-    
+
             // Siapkan data project
             $project = new Projects();
             $project->title = $request->title;
             $project->desc = $request->desc;
             $project->link = $request->link;
-    
+
             // Ambil data existing dari database
             $portofolio = Portofolio::where('user_id', $this->userId)->first();
             $existingProjects = json_decode($portofolio->projects, true) ?? [];
-    
+
             // Simpan ke database
             $existingProjects[] = $project;
             $portofolio->projects = $existingProjects;
             $portofolio->save();
-    
+
             DB::commit();
             return redirect()->back()->with('success', 'Project added successfully.');
         } catch (Exception $e) {
@@ -313,8 +316,8 @@ class PortofolioController extends Controller
             DB::commit();
             return redirect()->back()->with('success', 'Project deleted successfully.');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('Failed to delete project: '.$e->getMessage());
-            dd($e);
             return redirect()->back()->with('error', 'Failed to delete project: ' . $e->getMessage());
         }
     }
@@ -335,18 +338,16 @@ class PortofolioController extends Controller
             $contact->instagram = $request->instagram;
             $contact->linkedin = $request->linkedin;
             $contact->email = $request->email;
-            
+
             $portofolio->contacts = json_encode($contact);
-            
+
             $portofolio->save();
-            /* dd($contact); */
             DB::commit();
-            return redirect()->back()->with('success', 'Profile updated successfully.');
+            return redirect()->back()->with('success', 'Contact updated successfully.');
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error('Failed to update profile: '.$e->getMessage());
-            dd($e);
-            return redirect()->back()->with('error', 'Failed to update profile: ' . $e->getMessage());
+            Log::error('Failed to update contact: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Failed to update contact: ' . $e->getMessage());
         }
     }
 }

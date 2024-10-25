@@ -13,8 +13,8 @@ class PortofolioFactory extends Factory
     public function definition()
     {
         return [
-            'id' => 1, // Menentukan ID sesuai kebutuhan
-            'user_id' => 1, // Menentukan user_id yang sesuai
+            'id' => env('USER_ID'), // Menentukan ID sesuai kebutuhan
+            'user_id' => env('USER_ID'), // Menentukan user_id yang sesuai
             'name' => $this->faker->name, // Anda bisa mengubah ini sesuai data yang ingin diisi
             'profession' => $this->faker->jobTitle, // Contoh untuk data profession
             'profile_picture' => null, // Biarkan kosong atau sesuai data yang ingin diisi

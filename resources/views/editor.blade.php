@@ -69,12 +69,12 @@
                                             <input type="file" class="form-control" id="profile_pictureInput" accept=".png, .jpeg, .jpg, .gif" name="profile_picture" onchange="checkFileSize(this)">
                                         </div>
                                         <button type="submit" class="btn btn-success">Save</button>
-                                    </form>                            
-                                </div>  
+                                    </form>
+                                </div>
                                 {{-- Tampilkan gambar profil jika ada --}}
                                 <h6>Your Profile Picture :</h6>
                                 @if (!empty($data->profile_picture))
-                                    <img src="data:{{ $data->mime_type }};base64,{{ $data->profile_picture }}" alt="Profile Picture" width="200" height="200">
+                                    <img src="data:{{ $data->mime_type }};base64,{{ $data->profile_picture }}" alt="Profile" width="200" height="200">
                                 @else
                                     <p>No profile picture available</p>
                                 @endif
@@ -89,7 +89,7 @@
                                     </div>
                                     <button type="submit" class="btn btn-success">Save</button>
                                 </form>
-                                
+
                             </li>
                             <li class="list-group-item">
                                 {{-- Skill form--}}
@@ -101,12 +101,12 @@
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="skillTitleInput">Title</label>
                                                 <input type="text" name="title" id="skillTitleInput" class="form-control" placeholder="Title" required>
-                                                <font style="color: red; display: flex; align-items: center; padding: 0;">*</font>
+                                                <span style="color: red; display: flex; align-items: center; padding: 0;">*</span>
                                             </div>
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="skillDescInput">Description</label>
                                                 <textarea class="form-control" rows="3" id="skillDescInput" name="desc" required></textarea>
-                                                <font style="color: red; display: flex; align-items: center; padding: 0;">*</font>
+                                                <span style="color: red; display: flex; align-items: center; padding: 0;">*</span>
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-success">Add Skill</button>
@@ -139,19 +139,19 @@
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="projectTitleInput">Title</label>
                                                 <input type="text" name="title" id="projectTitleInput" class="form-control" placeholder="Title" required>
-                                                <font style="color: red; display: flex; align-items: center; padding: 0;">*</font>
+                                                <span style="color: red; display: flex; align-items: center; padding: 0;">*</span>
                                             </div>
                                             <!-- Description Input -->
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="projectDescInput">Description</label>
                                                 <textarea class="form-control" rows="3" id="projectDescInput" name="desc" required></textarea>
-                                                <font style="color: red; display: flex; align-items: center; padding: 0;">*</font>
+                                                <span style="color: red; display: flex; align-items: center; padding: 0;">*</span>
                                             </div>
                                             <!-- Link Input (Type URL) -->
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="projectLinkInput">Link</label>
                                                 <input type="url" name="link" id="projectLinkInput" class="form-control" placeholder="Link to your project" required>
-                                                <font style="color: red; display: flex; align-items: center; padding: 0;">*</font>
+                                                <span style="color: red; display: flex; align-items: center; padding: 0;">*</span>
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-success">Add Project</button>
@@ -176,6 +176,8 @@
                                             @endforeach
                                         </div>
                                     </div>
+                                @else
+                                    <p>Really no project you ever worked on? you're suck.</p>
                                 @endif
                             </li>
                             <li class="list-group-item">
@@ -198,7 +200,7 @@
                                         </div>
                                         <button type="submit" class="btn btn-success">Save</button>
                                     </form>
-                                </div>  
+                                </div>
                             </li>
                         </ul>
 
@@ -210,13 +212,13 @@
 
     <!-- Optional JavaScript; choose one of the two! -->
     <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-2HjD8LKo5QIsE5KChjArAxYGVJgPphA3v8N5U1PjM97L0VbFYg9gpNYUBs8LxK5S" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script>
         function checkFileSize(input) {
             var file = input.files[0];
             var sizeInBytes = file.size;
             var maxSize = 2 * 1024 * 1024; // 2 MB in bytes
-        
+
             if (sizeInBytes > maxSize) {
                 alert("Image size cannot exceed 2 MB.");
                 input.value = ""; // Clear the file input

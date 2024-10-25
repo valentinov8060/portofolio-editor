@@ -1,0 +1,47 @@
+-- Membuat tabel users
+CREATE TABLE users (
+    id serial PRIMARY KEY,
+    name varchar(255) NOT NULL UNIQUE,
+    password varchar(255) NOT NULL,
+    remember_token varchar(100),
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Membuat tabel sessions
+CREATE TABLE sessions (
+    id varchar(255) PRIMARY KEY,
+    user_id int REFERENCES users(id) ON DELETE SET NULL,
+    ip_address varchar(45),
+    user_agent text,
+    payload text NOT NULL,
+    last_activity int NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Membuat tabel portofolio dengan relasi ke tabel users
+CREATE TABLE portofolio (
+    id serial PRIMARY KEY,
+    user_id int REFERENCES users(id) ON DELETE CASCADE, -- Relasi ke tabel users
+    name varchar(100),
+    profession varchar(100),
+    profile_picture bytea,
+    mime_type varchar(20) CHECK (mime_type IN ('image/png', 'image/jpeg', 'image/jpg', 'image/gif')),
+    about text,
+    skills jsonb,
+    projects jsonb,
+    contacts jsonb,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Mengaktifkan Row-Level Security untuk tabel portofolio
+ALTER TABLE portofolio ENABLE ROW LEVEL SECURITY;
+
+-- Menambahkan kebijakan Row-Level Security (RLS)
+-- Hanya pengguna yang dapat mengakses portofolio mereka sendiri berdasarkan user_id
+CREATE POLICY access_portofolio
+ON portofolio
+FOR ALL
+USING (user_id = current_setting('app.user_id')::int);

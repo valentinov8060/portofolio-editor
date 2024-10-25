@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models\DTO;
 
 class Contacts {
     public $instagram;
     public $linkedin;
     public $email;
 }
+?>

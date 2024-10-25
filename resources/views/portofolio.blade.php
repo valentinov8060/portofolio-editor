@@ -66,9 +66,9 @@
             <div class="pb-3">
                 {{-- $data->profile_picture --}}
                 @if (!empty($data->profile_picture))
-                    <img src="data:{{ $data->mime_type }};base64,{{ $data->profile_picture }}" class="profile-pic">
+                    <img src="data:{{ $data->mime_type }};base64,{{ $data->profile_picture }}" class="profile-pic" alt="Profile">
                 @else
-                    <img src="..." class="profile-pic">
+                    <img src="..." class="profile-pic" alt="Profile">
                 @endif
             </div>
             <h5 class="text-body-tertiary mb-0">Hi There, I'm</h5>
